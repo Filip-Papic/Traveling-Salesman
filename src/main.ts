@@ -31,5 +31,5 @@ document
     }
     //downloadCompleteGraph(parseInt(n));
     drawCompleteGraph(parseInt(n), canvas);
-    solveTSPExact(parseInt(n), 0);
+    solveTSPExact(generateCompleteGraph(parseInt(n)));
   });

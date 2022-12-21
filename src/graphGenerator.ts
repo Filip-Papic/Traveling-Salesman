@@ -1,35 +1,15 @@
 /**
- * Generiše kompletan graf sa n čvorova i vraća grane grafa u CSV formatu.
- *
- * @param n Broj čvorova u grafu.
- * @return Grane grafa u CSV formatu.
- */
-export function generateCompleteGraph(n: number): string {
-  // Kreiraj prazan niz za čuvanje grana grafa
-  const edges: number[][] = [];
-
-  // Dodaj grane između svih parova čvorova
-  for (let i = 0; i < n; i++) {
-    for (let j = i + 1; j < n; j++) {
-      edges.push([i, j]);
-    }
-  }
-
-  // Konvertuj niz grana u CSV string
-  const csv = edges.map((edge) => edge.join(",")).join("\n");
-
-  // Vrati CSV string
-  return csv;
-}
-
-/**
  * Generiše kompletnu graf sa n čvorova i sačuva ga u fajl u CSV formatu.
  *
  * @param n Broj čvorova u grafu.
  */
 export function downloadCompleteGraph(n: number) {
-  // Generiši CSV string od grafa
-  const csv = generateCompleteGraph(n);
+  // Generiši grane od grafa
+  const edges = generateCompleteGraph(n);
+  
+  // Upišite grane u CSV datoteku
+  const csv = edges.map((e : any) => e.join(",")).join("\n");
+  console.log(csv);
 
   // Kreiraj novi link element
   const link = document.createElement("a");
@@ -49,11 +29,34 @@ export function downloadCompleteGraph(n: number) {
 }
 
 /**
+ * Generiše kompletan graf sa n čvorova i vraća grane grafa u CSV formatu.
+ *
+ * @param n Broj čvorova u grafu.
+ * @return Grane grafa i njihove težine u CSV formatu.
+ */
+export function generateCompleteGraph(n: number): [number, number, number][] {
+  // Niz za skladištenje grana grafa i njihovih težina
+  const edges: [number, number, number][] = [];
+
+  // Generišite grane grafa
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      // Generišite nasumičnu težinu za granu
+      const weight: number = Math.floor(Math.random() * 1000);
+      edges.push([i, j, weight]);
+    }
+  }
+  
+  return edges;
+}
+
+/**
  * Na canvas elementu iscrtava kompletan graf sa n čvorova.
  *
  * @param n Broj čvorova u grafu.
  */
-export function drawCompleteGraph(n: number, canvas: HTMLCanvasElement) { //canvas for now, later change to D3 or something
+export function drawCompleteGraph(n: number, canvas: HTMLCanvasElement) {
+  //canvas for now, later change to D3 or something
   // Kreiraj 2D kontekst canvas elementa
   const ctx = canvas.getContext("2d")!;
 
