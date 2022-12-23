@@ -1,7 +1,8 @@
 import "./style.css";
-import { generateCompleteGraph, downloadCompleteGraph, drawCompleteGraph } from "./graphGenerator";
+import { generateCompleteGraph, downloadCompleteGraph, drawCompleteGraph , generateGraph} from "./graphGenerator";
 import { solveTSPExact } from "./tspExact";
 import { solveTSPGreedy } from "./tspGreedy";
+import { solveTSPGreedyDrop } from "./tspGreedyDrop";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
@@ -32,6 +33,8 @@ document
     }
     //downloadCompleteGraph(parseInt(n));
     drawCompleteGraph(parseInt(n), canvas);
-    //solveTSPExact(generateCompleteGraph(parseInt(n)));
-    solveTSPGreedy(parseInt(n), generateCompleteGraph(parseInt(n)));
+    const graph = generateCompleteGraph(parseInt(n));
+    //solveTSPExact(graph);
+    //solveTSPGreedy(parseInt(n), graph);
+    solveTSPGreedyDrop(graph, parseInt(n));
   });

@@ -1,10 +1,8 @@
 /**
  * Funkcija za rešavanje problema putnog trgovca pomoću grubog algoritma
- * Ulazni parametri:
- * n: broj čvorova u grafu
- * E: lista grana u grafu, predstavljena kao trojke (u, v, w) gde je u i v čvorovi, a w težina grana (u, v)
- * Izlaz:
- * Niz čvorova predstavljajući minimalni put koji obilazi sve čvorove jednom
+ * @param n: broj čvorova u grafu
+ * @param E: lista grana u grafu, predstavljena kao trojke (u, v, w) gde je u i v čvorovi, a w težina grana (u, v)
+ * @returns Niz čvorova predstavljajući minimalni put koji obilazi sve čvorove jednom
  */
 export function solveTSPGreedy(
   n: number,

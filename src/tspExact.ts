@@ -1,26 +1,25 @@
 /**
- * This function returns the shortest possible tour for the given edges using the exact algorithm for the Traveling Salesman Problem (TSP).
- * @param edges An array of edges with their weights, where each edge is represented as an array with two elements: the starting node and the ending node, and the weight is the distance between them.
- * @returns An array representing the shortest possible tour, including the starting and ending nodes and the total distance.
+ * Ovaj funkcija vraća najkraći moguće ture za date grane koristeći tačan algoritam za problem putujućeg trgovca (TSP).
+ * @param edges Niz grana sa njihovim težinama, gdje je svaka grana predstavljena nizom od dva elementa: početna čvor i krajnja čvor, a težina je udaljenost između njih.
+ * @returns Niz koji predstavlja najkraću moguću turu, uključujući početni i krajnji čvor i ukupnu udaljenost.
  */
 export function solveTSPExact(
   edges: [number, number, number][]
 ): [number[], number] {
-  // Find the total number of nodes in the graph.
+  // Pronađi ukupan broj čvorova u grafu.
   const numNodes = Math.max(...edges.map(([, node]) => node)) + 1;
-
-  // Generate all possible tours of the graph.
-  // We start the tour at node 0, so we pass 0 as the first element in the permutation array.
+  // Generiši sve moguće ture grafa.
+  // Počinjemo turu na čvoru 0, pa prosleđujemo 0 kao prvi element u nizu permutacije.
   const tours = generatePermutations([0], numNodes);
 
-  // Find the shortest tour.
+  // Pronađi najkraću turu.
   let minTour: number[] = [];
   let minDistance = Infinity;
   for (const tour of tours) {
-    // Calculate the total distance for this tour.
+    // Izračunaj ukupnu udaljenost za ovu turu.
     let distance = 0;
     for (let i = 0; i < tour.length - 1; i++) {
-      // Find the edge between the current node and the next node in the tour.
+      // Pronađi granu između trenutnog čvora i sledećeg čvora u turi.
       const edge = edges.find(
         ([node1, node2]) =>
           (node1 === tour[i] && node2 === tour[i + 1]) ||
@@ -34,7 +33,7 @@ export function solveTSPExact(
         );
       }
     }
-    // Check if this tour is the shortest one so far.
+    // Proveri da li je ova tura trenutno najkraća.
     if (distance < minDistance) {
       minTour = tour;
       minDistance = distance;
@@ -43,24 +42,24 @@ export function solveTSPExact(
 
   console.log(`Shortest tour: ${minTour}`);
   console.log(`Total distance: ${minDistance}`);
-  
-  // Return the shortest tour and the total distance.
+
+  // Vrati najkraću turu i ukupnu udaljenost.
   return [minTour, minDistance];
 }
 
 /**
- * This is a helper function that generates all permutations of the given array.
- * @param arr The array to generate permutations for.
- * @param n The length of the permutations.
- * @returns An array containing all permutations of the given array.
+ * Ovaj je pomoćna funkcija koja generiše sve permutacije datog niza.
+ * @param arr Niz za koji se generišu permutacije.
+ * @param n Dužina permutacija.
+ * @returns Niz koji sadrži sve permutacije datog niza.
  */
 function generatePermutations(arr: number[], n: number): number[][] {
   const perms: number[][] = [];
   if (arr.length === n) {
-    // If the array is the correct length, add it to the list of permutations.
+    // Ako je niz tačne dužine, dodaj ga u listu permutacija.
     perms.push(arr);
   } else {
-    // Otherwise, generate all permutations that can be formed by adding one of the remaining numbers to the array.
+    // U suprotnom, generiši sve permutacije koje se mogu formirati dodavanjem jednog od preostalih brojeva u niz.
     for (let i = 1; i < n; i++) {
       if (arr.includes(i)) {
         continue;

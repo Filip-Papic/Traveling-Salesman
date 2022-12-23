@@ -29,10 +29,10 @@ export function downloadCompleteGraph(n: number) {
 }
 
 /**
- * Generiše kompletan graf sa n čvorova i vraća grane grafa u CSV formatu.
+ * Generiše kompletan graf sa n čvorova i vraća grane grafa i njihove težine.
  *
  * @param n Broj čvorova u grafu.
- * @return Grane grafa i njihove težine u CSV formatu.
+ * @return Grane grafa i njihove težine
  */
 export function generateCompleteGraph(n: number): [number, number, number][] {
   // Niz za skladištenje grana grafa i njihovih težina
@@ -49,6 +49,25 @@ export function generateCompleteGraph(n: number): [number, number, number][] {
   
   return edges;
 }
+
+/**
+ * Funkcija koja generiše pun graf sa težinama grana
+ * n - broj čvorova u grafu
+ */
+export function generateGraph(n: number): number[][] {
+  // Inicijalizuj graf kao prazan niz
+  const graph: number[][] = [];
+  // Prođi kroz sve parove čvorova
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      // Dodaj granu između čvorova i i j sa nasumičnom težinom između 1 i 100
+      graph.push([i, j, Math.floor(Math.random() * 100) + 1]);
+    }
+  }
+  // Vrati graf
+  return graph;
+}
+
 
 /**
  * Na canvas elementu iscrtava kompletan graf sa n čvorova.

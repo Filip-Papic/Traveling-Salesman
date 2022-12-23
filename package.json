@@ -11,5 +11,9 @@
   "devDependencies": {
     "typescript": "^4.9.3",
     "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "disjoint-set": "^1.1.8",
+    "union-find": "^1.0.2"
   }
 }
