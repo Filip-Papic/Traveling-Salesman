@@ -42,7 +42,7 @@ export function generateCompleteGraph(n: number): [number, number, number][] {
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       // Generišite nasumičnu težinu za granu
-      const weight: number = Math.floor(Math.random() * 1000);
+      const weight: number = Math.floor(Math.random() * 10) + 1;
       edges.push([i, j, weight]);
     }
   }
@@ -84,7 +84,7 @@ export function drawCompleteGraph(n: number, canvas: HTMLCanvasElement) {
 
   // Postavi širinu linije i stroke style
   ctx.lineWidth = 1;
-  ctx.strokeStyle = "black";
+  ctx.strokeStyle = "gray";
 
   // Postavi radius i centar kruga
   const radius = 200;
