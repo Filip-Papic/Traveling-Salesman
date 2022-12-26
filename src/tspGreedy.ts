@@ -36,6 +36,7 @@ export async function solveTSPGreedy(
       y: Math.random() * height,
     });
   }
+  
   const links = [];
   for (const [u, v, w] of E) {
     links.push({

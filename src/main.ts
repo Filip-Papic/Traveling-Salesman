@@ -43,6 +43,6 @@ document
     drawCompleteGraph(parseInt(n), canvas);
     const graph = generateCompleteGraph(parseInt(n));
     //solveTSPExact(graph);
-    solveTSPGreedy(parseInt(n), graph, 1000);
-    //solveTSPGreedyDrop(graph, parseInt(n));
+    //solveTSPGreedy(parseInt(n), graph, 1000);
+    solveTSPGreedyDrop(parseInt(n), graph, 1000);
   });
