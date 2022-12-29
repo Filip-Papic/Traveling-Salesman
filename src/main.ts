@@ -2,18 +2,27 @@ import "./style.css";
 import {
   generateCompleteGraph,
   downloadCompleteGraph,
-  drawCompleteGraph,
-  generateGraph,
+  drawCompleteGraph
 } from "./graphGenerator";
-import { solveTSPExact } from "./tspExact";
-import { solveTSPGreedy } from "./tspGreedy";
-import { solveTSPGreedyDrop } from "./tspGreedyDrop";
+import { solveTSPExact } from "./algorithms/tspExact";
+import { solveTSPGreedy } from "./algorithms/tspGreedy";
+import { solveTSPGreedyDrop } from "./algorithms/tspGreedyDrop";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div class="card">
       <h1>Traveling Salesman Problem</h1>
+      <label for="n">Number of nodes</label>
       <input type="number" id="n" placeholder="Number of nodes" min="5" max="1000" value="5">
-      <button id="graphGenerator" type="button">Generate graph</button>
+      <label for="delay">Delay (ms)</label>
+      <input type="number" id="delay" placeholder="Delay (ms)" min="0" max="100000" value="0" step="1000">
+      <select id="algorithm">
+        <option value="exact">Exact</option>
+        <option value="greedy">Greedy</option>
+        <option value="greedyDrop">Greedy with drop</option>
+      </select>
+      <button id="graphGenerator" type="button">Generate</button>
+      <button id="reset" type="button">Reset</button>
+      <button id="download" type="button">Download</button>
     </div>
     <div id="visualize">
       <div id="canvas">
@@ -23,26 +32,60 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </div>
 `;
 
-document
-  .querySelector<HTMLButtonElement>("#graphGenerator")!
-  .addEventListener("click", async () => {
-    const n = document.querySelector<HTMLInputElement>("#n")!.value;
-    const canvas = document.querySelector<HTMLCanvasElement>("#graph-canvas")!;
+const generate = document.querySelector<HTMLButtonElement>("#graphGenerator")!;
+const reset = document.querySelector<HTMLButtonElement>("#reset")!;
+const download = document.querySelector<HTMLButtonElement>("#download")!;
+reset.disabled = true;
 
-    if (n === "") {
-      alert("Number of nodes is required");
-      return;
-    } else if (parseInt(n) < 5) {
-      alert("Number of nodes must be 5 or greater");
-      return;
-    } else if (parseInt(n) > 1000) {
-      alert("Number of nodes must be 1000 or less");
-      return;
-    }
-    //downloadCompleteGraph(parseInt(n));
-    drawCompleteGraph(parseInt(n), canvas);
-    const graph = generateCompleteGraph(parseInt(n));
-    //solveTSPExact(graph);
-    //solveTSPGreedy(parseInt(n), graph, 1000);
-    solveTSPGreedyDrop(parseInt(n), graph, 1000);
+function isDisabled(bool: boolean) {
+  generate.disabled = bool;
+  reset.disabled = !bool;
+}
+
+generate.addEventListener("click", async () => {
+  isDisabled(true);
+  const n = document.querySelector<HTMLInputElement>("#n")!.value;
+  const canvas = document.querySelector<HTMLCanvasElement>("#graph-canvas")!;
+
+  if (n === "") {
+    alert("Number of nodes is required");
+    return;
+  } else if (parseInt(n) < 5) {
+    alert("Number of nodes must be 5 or greater");
+    return;
+  } else if (parseInt(n) > 1000) {
+    alert("Number of nodes must be 1000 or less");
+    return;
+  }
+
+  const delay = parseInt(
+    document.querySelector<HTMLInputElement>("#delay")!.value
+  );
+
+  const algorithm =
+    document.querySelector<HTMLSelectElement>("#algorithm")!.value;
+
+  const graph = generateCompleteGraph(parseInt(n));
+
+  download.addEventListener("click", () => {
+    downloadCompleteGraph(graph);
   });
+
+  drawCompleteGraph(parseInt(n), canvas);
+  let startTime = performance.now();
+  if (algorithm === "exact") {
+    solveTSPExact(parseInt(n), graph, delay);
+  } else if (algorithm === "greedy") {
+    solveTSPGreedy(parseInt(n), graph, delay);
+  } else if (algorithm === "greedyDrop") {
+    solveTSPGreedyDrop(parseInt(n), graph, delay);
+  }
+  let endTime = performance.now();
+
+  console.log("Vreme izvršavanja:" + (endTime - startTime) / 1000 + " sekunde");
+});
+
+reset.addEventListener("click", () => {
+  isDisabled(false);
+  document.querySelector<HTMLDivElement>("#graph")!.innerHTML = "";
+});

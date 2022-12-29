@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 /**
- * Funkcija za rešavanje problema putnog trgovca pomoću grubog algoritma
+ * Funkcija za rešavanje problema putnog trgovca pomoću greedy algoritma
  * @param n: broj čvorova u grafu
  * @param E: lista grana u grafu, predstavljena kao trojke (u, v, w) gde je u i v čvorovi, a w težina grana (u, v)
  * @param delay: vreme pauze između koraka algoritma
@@ -13,7 +13,7 @@ export async function solveTSPGreedy(
   delay: number
 ): Promise<Array<number>> {
   console.log(
-    "Počinjemo rešavanje problema putnog trgovca grubim algoritmom..."
+    "Počinjemo rešavanje problema putnog trgovca greedy algoritmom..."
   );
   const result: Array<number> = [0];
   const visited = new Set([0]);
@@ -36,7 +36,7 @@ export async function solveTSPGreedy(
       y: Math.random() * height,
     });
   }
-  
+
   const links = [];
   for (const [u, v, w] of E) {
     links.push({
@@ -109,7 +109,7 @@ export async function solveTSPGreedy(
       }
     }
     console.log(
-      `Najmanji brid koji vodi ka neposetjenom čvoru je brid (${
+      `Najmanja grana koji vodi ka neposećenom čvoru je grana (${
         result[result.length - 1]
       }, ${next}) sa težinom ${minWeight}`
     );
@@ -119,7 +119,7 @@ export async function solveTSPGreedy(
     result.push(next);
     visited.add(next);
     console.log(
-      `Dodajemo čvor ${next} u rezultat i označavamo ga kao posetjen`
+      `Dodajemo čvor ${next} u rezultat i označavamo ga kao posećen`
     );
     //await new Promise((resolve) => setTimeout(resolve, delay));
   }
@@ -140,11 +140,13 @@ export async function solveTSPGreedy(
 
     console.log(`Bojimo granu (${current}, ${next}) u crveno`);
     current = next; // postavljamo trenutni čvor
-
-    await new Promise((resolve) => setTimeout(resolve, delay));
+    
+    if (delay > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
   }
 
   console.log(`Rešenje problema putnog trgovca je: ${result}`);
-  
+
   return result;
 }

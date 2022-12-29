@@ -110,18 +110,18 @@ export async function solveTSPGreedyDrop(
 
   // Iterirajte kroz permutaciju cvorova
   for (let i = 0; i < permutation.length - 1; i++) {
-    console.log(`Iteration ${i + 1}`);
-    console.log(`Current permutation: ${permutation}`);
+    console.log(`Iteracija ${i + 1}`);
+    console.log(`Trenutna permutacija: ${permutation}`);
 
     // Pronađite granu između trenutnog i sledećeg cvora u permutaciji
     edge = findEdge(edges, permutation[i], permutation[i + 1]);
 
-    console.log(`Selected edge: ${edge[0]}, ${edge[1]}`);
+    console.log(`Odabrana grana: ${edge[0]}, ${edge[1]}`);
 
     // Uklonite granu iz niza sa granama
     edges = edges.filter((e) => !(e[0] === edge[0] && e[1] === edge[1]));
 
-    console.log(`Updated edges list: ${edges}`);
+    console.log(`Ažurirana lista grana: ${edges}`);
 
     link.style("stroke", (d) => {
       if (d.source.id === edge[0] && d.target.id === edge[1]) {
@@ -132,14 +132,16 @@ export async function solveTSPGreedyDrop(
 
     // Dodajte granu u rešenje TSP-a
     solution.push(edge);
-    console.log(`Current solution: ${solution}`);
+    console.log(`Trenutno rešenje: ${solution}`);
 
-    // Dodajte granu u niz sa posecenim granama
+    // Dodajte granu u niz sa posećenim granama
     visited.push(edge);
     tick();
 
     // Pauzirajte izvršavanje programa
-    await new Promise((resolve) => setTimeout(resolve, delay));
+    if (delay > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
   }
 
   // Dodajte granu između poslednjeg i prvog cvora u permutaciji
@@ -148,13 +150,17 @@ export async function solveTSPGreedyDrop(
   visited.push(edge);
   tick();
 
-  console.log(`Solution: ${solution}`);
-  console.log(`Total distance: ${solution.reduce((a, b) => a + b[2], 0)}`);
+  console.log(`Rešenje: ${solution}`);
+  console.log(`Ukupna distanca: ${solution.reduce((a, b) => a + b[2], 0)}`);
 
   return solution;
 }
 
-// Funkcija za inicijalizaciju niza sa proizvoljnim permutacijama cvorova
+/**
+ * Funkcija za inicijalizaciju niza sa proizvoljnim permutacijama cvorova
+ * @param n Broj cvorova u grafu
+ * @returns Permutacija cvorova
+ */
 function initializePermutation(n: number): number[] {
   // Niz sa svim cvorovima
   const nodes: number[] = [];
