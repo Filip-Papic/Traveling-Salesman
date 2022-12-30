@@ -94,7 +94,7 @@ export async function solveTSPGreedy(
   
 
   // pokreni simulaciju
-  const simulation = d3
+  d3
     .forceSimulation(nodes)
     .force("charge", d3.forceManyBody().strength(-100))
     .force("link", d3.forceLink(links).distance(350))
@@ -110,7 +110,6 @@ export async function solveTSPGreedy(
     // Find the minimum weight edge leading to an unvisited node
     let minWeight = Number.MAX_VALUE;
     let next: number | undefined;
-    let minEdge: [number, number, number] | undefined;
 
 
     for (const [u, v, w] of E) {
@@ -127,16 +126,15 @@ export async function solveTSPGreedy(
     }
     // Choose the minimum weight edge leading to an unvisited node
     for (const [v, edges] of unvisitedEdges) {
-      const weight = Math.min(...edges.map(([u, v, w]) => w));
+      const weight = Math.min(...edges.map(([,, w]) => w));
       if (weight < minWeight) {
         minWeight = weight;
         next = v;
-        minEdge = edges.find(([u, v, w]) => w === weight)!;
       }
     }
-    console.log(
+    /* console.log(
       `The minimum weight edge leading to an unvisited node is edge (${minEdge[0]}, ${minEdge[1]}) with weight ${minEdge[2]}`
-    );
+    ); */
 
     if (next === undefined) {
       throw new Error("The graph is not connected");
@@ -166,7 +164,7 @@ export async function solveTSPGreedy(
   // obojimo grane koje čine rešenje problema putnog trgovca u crveno
   let current = result[0];
   for (const next of result.slice(1)) {
-    const link = svg
+    svg
       .selectAll(".link")
       .filter(
         (d: any) =>

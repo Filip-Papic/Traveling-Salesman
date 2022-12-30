@@ -3,8 +3,9 @@
  * @param edges Niz grana grafa
  */
 export function downloadCompleteGraph(edges: [number, number, number][]) {
+
   // Dodaj zaglavlje u niz grana grafa
-  edges.unshift(["Node1", "Node2", "Weight"]);
+  edges.unshift(["Node1" as any, "Node2" as any, "Weight" as any]);
 
   // Upišite grane u CSV datoteku
   const csv = edges.map((e: any) => e.join(",")).join("\n");

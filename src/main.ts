@@ -71,7 +71,7 @@ generate.addEventListener("click", async () => {
     downloadCompleteGraph(graph);
   });
 
-  //drawCompleteGraph(parseInt(n), canvas);
+  drawCompleteGraph(parseInt(n), canvas);
   let startTime = performance.now();
   if (algorithm === "exact") {
     solveTSPExact(parseInt(n), graph, delay);

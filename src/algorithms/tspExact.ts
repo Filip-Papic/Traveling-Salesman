@@ -152,7 +152,7 @@ export async function solveTSPExact(
   };
 
   // pokreni simulaciju
-  const simulation = d3
+  d3
     .forceSimulation(nodes)
     .force("charge", d3.forceManyBody().strength(-100))
     .force("link", d3.forceLink(links).distance(350))
