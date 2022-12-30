@@ -12,13 +12,13 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div class="card">
       <h1>Traveling Salesman Problem</h1>
       <label for="n">Number of nodes</label>
-      <input type="number" id="n" placeholder="Number of nodes" min="5" max="1000" value="5">
+      <input type="number" id="n" placeholder="Number of nodes" min="5" max="1000" value="20">
       <label for="delay">Delay (ms)</label>
       <input type="number" id="delay" placeholder="Delay (ms)" min="0" max="100000" value="0" step="1000">
       <select id="algorithm">
         <option value="exact">Exact</option>
         <option value="greedy">Greedy</option>
-        <option value="greedyDrop">Greedy with drop</option>
+        <option value="greedyDrop">Greedy drop</option>
       </select>
       <button id="graphGenerator" type="button">Generate</button>
       <button id="reset" type="button">Reset</button>
@@ -71,7 +71,7 @@ generate.addEventListener("click", async () => {
     downloadCompleteGraph(graph);
   });
 
-  drawCompleteGraph(parseInt(n), canvas);
+  //drawCompleteGraph(parseInt(n), canvas);
   let startTime = performance.now();
   if (algorithm === "exact") {
     solveTSPExact(parseInt(n), graph, delay);

@@ -42,6 +42,7 @@ h1 {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: 0;
   text-align: center;
 }
 
@@ -59,6 +60,7 @@ h1 {
 
 .card {
   padding: 2em;
+  padding-top: 0;
 }
 
 .read-the-docs {

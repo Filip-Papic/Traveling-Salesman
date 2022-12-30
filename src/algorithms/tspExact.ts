@@ -158,6 +158,8 @@ export async function solveTSPExact(
     .force("link", d3.forceLink(links).distance(350))
     .on("tick", tick);
 
+  // Branche and Bound
+
   // Dok god ima grana u prioritetnoj listi, uzmi najmanju granu i nastavi put
   while (pq.size() > 0) {
     // Ukloni granu sa najmanjom tezinom iz prioritetne liste
@@ -166,18 +168,14 @@ export async function solveTSPExact(
     pathLength += w;
     visited.push([u, v, w]);
 
-    console.log(
-      `Trenutni put: ${visited.map(([x, y]) => `${x} -> ${y}`).join(" -> ")}`
-    );
-    console.log(`Trenutni put duzina: ${pathLength}`);
-
+    console.log(`Posetio grad ${v} iz grada ${u} tezine ${w}`)
     tick();
 
     if (delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
-
-    // Izracunaj lower bound vrednost
+    
+    // Izracunaj donju granicu
     let lowerBound = pathLength;
     for (let i = 0; i < n; i++) {
       if (!visited.find(([u]) => u === i)) {
@@ -185,17 +183,15 @@ export async function solveTSPExact(
       }
     }
 
-    console.log(`Donja granica: ${lowerBound}`);
-
-    // Ako je duzina trenutnog puta manja od najbolje duzine i ako su svi gradovi posveceni, azuriraj najbolju duzinu i najbolji put 
+    // Ako je duzina puta do sada manja od najbolje duzine puta i ako je posetio sve gradove, azuriraj najbolju duzinu puta
     if (pathLength < bestLength && visited.length === n) {
+      console.log(`Najbolji put: ${visited.map(([x, y]) => `${x} -> ${y}`).join(" -> ")}`);
       bestLength = pathLength;
       bestPath = [...visited];
     }
 
-    // Ako je lower bound veci ili jednak najboljoj duzini puta, preskoci ostatak puta
+    // Ako je donja granica veca ili jednaka najboljoj duzini puta, preskoci ovaj put
     if (lowerBound >= bestLength) {
-      console.log("Preskacem ostatak puta");
       continue;
     }
 
@@ -205,17 +201,14 @@ export async function solveTSPExact(
         pq.enqueue([u, v, w]);
       }
     }
-    // Ako su svi gradovi posveceni i duzina trenutnog puta je manja od najbolje duzine puta, azuriraj najbolji put
-    if (visited.length === n && pathLength < bestLength) {
-      bestLength = pathLength;
-      bestPath = [...visited];
-    }
   }
 
   console.log(
-    `Gotovo. Najbolji put: ${bestPath.map(([x, y]) => `${x} -> ${y}`).join(" -> ")}`
+    `Gotovo. Najbolji put: ${bestPath
+      .map(([x, y]) => `${x} -> ${y}`)
+      .join(" -> ")}`
   );
-
   console.log(`Duzina najboljeg puta: ${bestLength}`);
+
   return bestPath;
 }

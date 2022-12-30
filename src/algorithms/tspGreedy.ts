@@ -86,10 +86,12 @@ export async function solveTSPGreedy(
       .attr("x2", (d) => d.target.x)
       .attr("y2", (d) => d.target.y);
 
-    node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+      node.attr("fill", (d) => (visited.has(d.id) ? "red" : "black"));
+
 
     label.attr("x", (d) => d.x).attr("y", (d) => d.y);
   };
+  
 
   // pokreni simulaciju
   const simulation = d3
@@ -98,29 +100,64 @@ export async function solveTSPGreedy(
     .force("link", d3.forceLink(links).distance(350))
     .on("tick", tick);
 
+
+  // Create a Map object to store the list of edges leading to each unvisited node
+  const unvisitedEdges = new Map<number, Array<[number, number, number]>>();
+
   while (result.length < n) {
-    console.log(`Trenutni rezultat: ${result}`);
+    console.log(`Current result: ${result}`);
+
+    // Find the minimum weight edge leading to an unvisited node
     let minWeight = Number.MAX_VALUE;
     let next: number | undefined;
+    let minEdge: [number, number, number] | undefined;
+
+
     for (const [u, v, w] of E) {
-      if (visited.has(u) && !visited.has(v) && w < minWeight) {
-        minWeight = w;
+      if (visited.has(u) && !visited.has(v)) {
+        // If this is the first edge leading to the unvisited node v, add it to the Map
+        if (!unvisitedEdges.has(v)) {
+          unvisitedEdges.set(v, [[u, v, w]]);
+        }
+        // Otherwise, add the edge to the list of edges leading to the unvisited node v
+        else {
+          unvisitedEdges.get(v)!.push([u, v, w]);
+        }
+      }
+    }
+    // Choose the minimum weight edge leading to an unvisited node
+    for (const [v, edges] of unvisitedEdges) {
+      const weight = Math.min(...edges.map(([u, v, w]) => w));
+      if (weight < minWeight) {
+        minWeight = weight;
         next = v;
+        minEdge = edges.find(([u, v, w]) => w === weight)!;
       }
     }
     console.log(
-      `Najmanja grana koji vodi ka neposećenom čvoru je grana (${
-        result[result.length - 1]
-      }, ${next}) sa težinom ${minWeight}`
+      `The minimum weight edge leading to an unvisited node is edge (${minEdge[0]}, ${minEdge[1]}) with weight ${minEdge[2]}`
     );
+
     if (next === undefined) {
-      throw new Error("Graf nije povezan");
+      throw new Error("The graph is not connected");
     }
+
+    /* if (delay > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    } */
+    tick();
+    
     result.push(next);
     visited.add(next);
-    console.log(
-      `Dodajemo čvor ${next} u rezultat i označavamo ga kao posećen`
-    );
+    console.log(`Adding node ${next} to the result and marking it as visited`);
+    // Clear the Map of unvisited edges
+    unvisitedEdges.clear();
+    // Update the list of unvisited edges
+    for (const [u, v, w] of E) {
+      if (visited.has(u) && !visited.has(v)) {
+        unvisitedEdges.set(v, [[u, v, w]]);
+      }
+    }
     //await new Promise((resolve) => setTimeout(resolve, delay));
   }
 
@@ -138,12 +175,10 @@ export async function solveTSPGreedy(
       )
       .style("stroke", "red");
 
-    console.log(`Bojimo granu (${current}, ${next}) u crveno`);
     current = next; // postavljamo trenutni čvor
-    
     if (delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
-    }
+    } 
   }
 
   console.log(`Rešenje problema putnog trgovca je: ${result}`);

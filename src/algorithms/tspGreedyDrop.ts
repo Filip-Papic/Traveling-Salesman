@@ -12,7 +12,10 @@ export async function solveTSPGreedyDrop(
   edges: [number, number, number][],
   delay: number
 ): Promise<[number, number, number][]> {
+
+  // Inicijalizuj slučajnu permutaciju čvorova
   const permutation = initializePermutation(n);
+  
   // Niz za skladištenje rešenja TSP-a
   const solution: [number, number, number][] = [];
 
@@ -121,7 +124,7 @@ export async function solveTSPGreedyDrop(
     // Uklonite granu iz niza sa granama
     edges = edges.filter((e) => !(e[0] === edge[0] && e[1] === edge[1]));
 
-    console.log(`Ažurirana lista grana: ${edges}`);
+    //console.log(`Ažurirana lista grana: ${edges}`);
 
     link.style("stroke", (d) => {
       if (d.source.id === edge[0] && d.target.id === edge[1]) {
@@ -132,7 +135,7 @@ export async function solveTSPGreedyDrop(
 
     // Dodajte granu u rešenje TSP-a
     solution.push(edge);
-    console.log(`Trenutno rešenje: ${solution}`);
+    //console.log(`Trenutno rešenje: ${solution}`);
 
     // Dodajte granu u niz sa posećenim granama
     visited.push(edge);
